@@ -15,8 +15,7 @@ using namespace std;
 void sortTwoElArr_1(vector<int>& arr){
 /*
     Approach 1
-    ----------
-    Description: 
+    ---------- 
     - Let the smaller element be X and larger element be Y. 
     - We first find the first index of the larger element Y, say i.
     - We try to maintain two windows, one consisting of the Xs and one with Ys only.
@@ -51,14 +50,65 @@ void sortTwoElArr_1(vector<int>& arr){
     // After the above steps i will point to first index of the larger element.
     // The window between i to j-1 will contain all the occurences of the larger element discovered yet.
 
-    // Loop until j is less than size of array.
-    // If at jth index smaller element is found, swap the ith and jth element and increment i.
     while(j < arr.size()){
+        // If at jth index smaller element is found, swap the ith and jth element and increment i.
         if(arr[i] != arr[j]){
             swap(arr[i], arr[j]);
             i++;
         }
         j++;
+    }
+}
+
+// Approach 2: Finding the larger element and then partition the array keeping that element as pivot.
+int findMax(vector<int> arr){
+    int i, max = arr[0];
+    for(i = 1; i < arr.size(); i++){        
+        if(arr[i] > max){
+            max = arr[i];
+            break;
+        } 
+    }
+    return max;
+}
+
+void sort2ElArr_2(vector<int> arr){
+    int max = findMax(arr);
+
+    int i = 0, j = 0;
+
+    // Partition array keeping max as pivot.
+    while(j < arr.size()){
+        if(arr[j] == max)
+            j++;
+        else{
+            swap(arr[i], arr[j]);
+            i++;
+            j++;
+        }
+    } 
+}
+
+
+// Approach 3: Count and fill based approach
+vector<int> getMinMaxCount(vector<int> arr);
+
+void sort2ElArr_3(vector<int> arr){
+    int i, minEl, maxEl, minCount, maxCount; 
+    vector<int> minMaxCount = getMinMaxCount(arr);
+    minEl = minMaxCount[0];
+    minCount = minMaxCount[1];
+    maxEl = minMaxCount[2];
+    maxCount = minMaxCount[3];
+
+    // Fill the first minCount indices with minEl
+    while(i < minCount){
+        arr[i++] = minEl;
+    }
+
+    // Fill the remaining with maxEl;
+    while(i < arr.size()){
+        arr[i++] = maxEl;
     }
 }
 
